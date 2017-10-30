@@ -22,43 +22,20 @@ myApp.c = {};
 
 // configuracoes iniciais do app
 myApp.c.appConfig = {
-
-    url: 'http://52.67.208.141/cashbackdev/frontend/web/index.php?r=',	
-	//  url: 'http://localhost/apiestalecas/frontend/web/index.php?r=',
-    
-    urlFoto: 'http://52.67.208.141/cashbackdev/frontend/web/',	
-	//	urlFoto: 'http://localhost/apiestalecas/frontend/web/',
-    //urlFoto: 'http://localhost/cashback/frontend/web/',
-    
-    //url: 'http://52.67.208.141/cashbackdev/frontend/web/index.php?r=',
-    //url: 'http://localhost/apiestalecas/frontend/web/index.php?r=',
-    //urlFoto: 'http://localhost/apiestalecas/frontend/web/',
-    
-    // Eduardo
-    //urlFoto: 'http://localhost/cashback/frontend/web/',
-    indicacaoUrl:'http://52.67.208.141/cashbackdev/indicacao/register.php?auth_key=',
-    back: false,
-    backRecarregou: true,
-    actionInit: false,
-	
-	
-	
-	
-	
 	// Informacoes do app 
 	appLogo: './assets/img/logo.png',
 	appName: 'MyApp',
 	appSlogan: 'MyApp Slogan',
-	
+
 	// URL utilizados nas requisicoes ajax
-    urlApi: 'http://localhost/api/frontend/web/index.php?r=api-controller/',
+	urlApi: 'http://localhost/api/frontend/web/index.php?r=api-controller/',
 
 	// lista com todas as paginas acessiveis do sistema
 	pages: [],
-	
+
 	// pagina inicial
 	indexPage: '',
-	
+
 	// se nao for utilizar os atributos a baixo passe FALSE / ou para aplicar em todas as paginas passe TRUE
 	navbarHide: ['form'], 
 	panelLeftHide: false, 
