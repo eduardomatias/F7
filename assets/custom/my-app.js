@@ -29,15 +29,15 @@ myApp.c.appConfig = {
     // infineteScroll
     infineteScrollEnable: true,
     // Itens carregados por vez
-    infineteScrollQtd: 10,
+    infineteScrollQtd: 25,
 
     // URL utilizados nas requisicoes ajax
-    urlApi: 'http://localhost/F7/appHtml/backend/',
+    urlApi: './backend/',
     // URL das imagens
-    urlImg: 'http://localhost/F7/appHtml/backend/img/',
+    urlImg: './backend/img/',
     imgDefault: 'imgDefault.gif',
     // URL dos tamplates de lista
-    urlTemplateList: 'templates/list/',
+    urlTemplateList: './templates/list/',
 
     // lista com todas as paginas acessiveis do sistema
     pages: [],
@@ -325,6 +325,7 @@ myApp.c.initCalendar = function () {
  */
 myApp.c.listView = function (action, param, target, callback, search = true, infiniteScroll = true) {
     var objTarget = $('div#' + target);
+	this.appConfig.infineteScrollEnable = infiniteScroll;
     if (objTarget.length == 0) {
         console.warn('[myApp.c.listView] O target informado não foi encontrado, é necessário criar uma  <div> com id="' + target + '".');
         return;
@@ -333,15 +334,16 @@ myApp.c.listView = function (action, param, target, callback, search = true, inf
     var TemplateListView = new Template(target);
     TemplateListView.compileList(action, param, function (a) {
         if (search) myApp.c.createSearchList();
-        if (infiniteScroll && myApp.c.appConfig.infineteScrollEnable) myApp.c.infiniteScroll(TemplateListView, a);
+        if (myApp.c.appConfig.infineteScrollEnable) myApp.c.infiniteScroll(TemplateListView, a);
         if (typeof callback == 'function') callback(a);
     });
 };
 
 // cria searchlist
 myApp.c.createSearchList = function () {
-    var searchBar = '\
-            <form class="searchbar">\n\
+    var numObj = $('.page .page-content').length - 1,
+		searchBar = '\
+            <form class="searchbar searchbar-' + numObj + '">\n\
                 <div class="searchbar-input">\n\
                     <input type="search" placeholder="buscar">\n\
                     <a href="#" class="searchbar-clear"></a>\n\
@@ -353,13 +355,16 @@ myApp.c.createSearchList = function () {
             <div class="content-block searchbar-not-found">\n\
                <div class="content-block-inner">Nenhum registro encontrado.</div>\n\
             </div>',
-        objHtml = $('.page .page-content');
+		objHtml = $($('.page .page-content')[numObj]);
     objHtml.before(searchBar);
     objHtml.find('.list-block').addClass('list-block-search searchbar-found').before(notFound);
-    myApp.searchbar('.searchbar', {
+    searchbar = myApp.searchbar('.searchbar-' + numObj, {
         searchList: '.list-block-search',
-        searchIn: '.item-title'
-    });
+        searchIn: '.item-title',
+		onSearch: function(a){
+			console.log(a);
+		}
+	});
 };
 
 // cria infiniteScroll
@@ -367,7 +372,7 @@ myApp.c.infiniteScroll = function (TemplateListView, data) {
     
     // verifica se é um array ou object
     var dataArray = data instanceof Array;
-    var newObjectList = dataArray ? [] : {};
+    var newObjectList;
 
     // add class infinite-scroll
     var objList = $($('.infinite-scroll')[$('.infinite-scroll').length - 1]);
@@ -396,25 +401,27 @@ myApp.c.infiniteScroll = function (TemplateListView, data) {
     
     // Attach 'infinite' event handler
     objList.on('infinite', function () {
-
+		
+		$$('.infinite-scroll-preloader').show();
+		
         // Exit, if loading in progress
-        if (loading) return;
+        if (loading)  return;
 
         // Set loading flag
         loading = true;
 
-        // Emulate 1s loading
+        // Emulate 0,5s loading
         setTimeout(function () {
 
             // Reset loading flag
             loading = false;
 
             if (lastIndex >= maxItems) {
-                // Nothing more to load, detach infinite scroll events to prevent unnecessary loadings
-                myApp.detachInfiniteScroll(objList);
-                // Remove preloader
-                $$('.infinite-scroll-preloader').remove();
-                return;
+				// Nothing more to load, detach infinite scroll events to prevent unnecessary loadings
+				myApp.detachInfiniteScroll(objList);
+				// Remove preloader
+				$$('.infinite-scroll-preloader').remove();
+				return;
             }
 
             // Generate new object
@@ -435,7 +442,9 @@ myApp.c.infiniteScroll = function (TemplateListView, data) {
 
             // Update last loaded index
             lastIndex = objListBlock.find('li').length;
-                
+			
+			$$('.infinite-scroll-preloader').hide();
+			
         }, 500);
         
     });

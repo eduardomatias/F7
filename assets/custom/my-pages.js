@@ -24,7 +24,7 @@ class LoadPage {
         myApp.c.listView ('listEstados.php', {}, 'listEstados', function (a) {
             console.log('estados');
             console.log(a);
-        });
+        }, true, false);
     }
 
     listPaises(page) {
@@ -32,7 +32,7 @@ class LoadPage {
         myApp.c.listView ('listPaises.php', {}, 'listPaises', function (a) {
             console.log('paises');
             console.log(a);
-        });
+        }, false, true);
     }
 
 }
