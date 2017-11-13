@@ -20,8 +20,8 @@ Template7.registerHelper('percent2', function (a, b) {
     return String(parseFloat((a / b) * 100).toFixed(2)).replace('.', ',');
 });
 
-Template7.registerHelper('foto', function (a, options) {
-    return appConfig.urlFoto + (a || appConfig.urlFotoDefault);
+Template7.registerHelper('img', function (a, b, options) {
+    return '<img src="' + myApp.c.appConfig.urlImg + (a.toLocaleLowerCase() || myApp.c.appConfig.imgDefault) + '" class="' + ( typeof b == 'string' ? b : '' ) + '" />';
 });
 
 Template7.registerHelper('data', function (a) {
@@ -91,7 +91,9 @@ class Template {
     compileAjax(method, params, callback) {
         var templateCompiled = this;
         myApp.c.ajaxApi(method, params, function (a) {
-            templateCompiled.compileAndLoadData(a);
+            if (!myApp.c.appConfig.infineteScrollEnable) {
+                templateCompiled.compileAndLoadData(a);
+            }
             if (typeof callback == "function") {
                 callback(a);
             }
@@ -104,35 +106,12 @@ class Template {
                 var template = '{{> "listData"}}';
                 T7.Template7.registerPartial(
                     'listData', 
-                    '<ul class="template-list">' + 
-                        '{{#each data}}' +
-                            '<li class="item-content">' + a + '</li>' +
-                        '{{/each}}' +
-                    '</ul>'
+                    '{{#each data}}' +
+                        '<li class="item-content">' + a + '</li>' +
+                    '{{/each}}'
                 );
                 T7.templateCompiled = T7.Template7.compile(template);
-
-                // test
-                T7.compileAndLoadData([
-                    {
-                        author: 'Kate Doe',
-                        text: 'Donec eget fringilla turpis'
-                    },
-                    {
-                        author: 'Mike Doe',
-                        text: 'Aliquam erat volutpat'
-                    },
-                    {
-                        author: 'John Doe',
-                        text: 'Lorem ipsum dolor',
-                    },
-                    {
-                        author: 'Jane Doe',
-                        text: 'Donec sodales euismod augue'
-                    }
-                ]);
-
-                //T7.compileAjax(method, params, callback);
+                T7.compileAjax(method, params, callback);
             };
     
         $('<div>').load(myApp.c.appConfig.urlTemplateList + this.templateId + '.html', callbackLoad);

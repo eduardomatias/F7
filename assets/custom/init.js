@@ -1,13 +1,14 @@
 /* CONFIG */
 myApp.c.setAppConfig({
-    pages: ['home', 'about', 'form', 'services', 'list'],
-    indexPage: 'list.html',
+    pages: ['home', 'about', 'form', 'services', 'listEstados', 'listPaises'],
+    indexPage: 'home.html',
 });
 
 myApp.c.setPanelLeft([
     {href: 'home.html', label: 'HOME', ico: 'home'},
     {href: 'form.html', label: 'FORM', ico: 'wpforms'},
-    {href: 'list.html', label: 'LIST', ico: 'list-alt'},
+    {href: 'listEstados.html', label: 'ESTADOS', ico: 'list-alt'},
+    {href: 'listPaises.html', label: 'PAISES', ico: 'list-alt'},
     {href: 'about.html', label: 'ABOUT', ico: 'info-circle'},
     {href: 'services.html', label: 'SERVICES', ico: 'cogs'},
     {label: 'FECHAR', ico: 'close'}
@@ -20,9 +21,8 @@ myApp.c.setPanelRight([
 ]);
 
 myApp.c.setToolbar([
+    {href: 'home.html', class: '', label: 'HOME', ico: 'home'},
     {href: 'form.html', class: '', label: 'FORM', ico: 'wpforms'},
-    {href: 'list.html', class: '', label: 'LIST', ico: 'list-alt'},
-    {href: 'services.html', class: '', label: 'SERVICES', ico: 'cogs'},
     {href: 'about.html', class: '', label: 'ABOUT', ico: 'info-circle'},
 ]);
 /* CONFIG */

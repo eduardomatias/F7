@@ -3,25 +3,36 @@ class LoadPage {
     constructor() {
     }
 
-    Home(page) {
+    home(page) {
         console.log(page.url);
     }
 
-    Form(page) {
+    form(page) {
         console.log(page.url);
     }
 
-    Services(page) {
+    services(page) {
         console.log(page.url);
     }
 
-    About(page) {
+    about(page) {
         console.log(page.url);
     }
 
-    List(page) {
-        new Template('listDemo').compileList();
+    listEstados(page) {
         console.log(page.url);
+        myApp.c.listView ('listEstados.php', {}, 'listEstados', function (a) {
+            console.log('estados');
+            console.log(a);
+        });
+    }
+
+    listPaises(page) {
+        console.log(page.url);
+        myApp.c.listView ('listPaises.php', {}, 'listPaises', function (a) {
+            console.log('paises');
+            console.log(a);
+        });
     }
 
 }

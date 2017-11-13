@@ -22,28 +22,38 @@ myApp.c = {};
 
 // configuracoes iniciais do app
 myApp.c.appConfig = {
-    // Informacoes do app 
+    // informacoes do app 
     appLogo: './assets/img/logo.png',
     appName: 'MyApp',
     appSlogan: 'MyApp Slogan',
+    // infineteScroll
+    infineteScrollEnable: true,
+    // Itens carregados por vez
+    infineteScrollQtd: 10,
 
     // URL utilizados nas requisicoes ajax
-    urlApi: 'http://localhost/api/frontend/web/index.php?r=api-controller/',
-    
-    // caminho dos tamplates de lista
+    urlApi: 'http://localhost/F7/appHtml/backend/',
+    // URL das imagens
+    urlImg: 'http://localhost/F7/appHtml/backend/img/',
+    imgDefault: 'imgDefault.gif',
+    // URL dos tamplates de lista
     urlTemplateList: 'templates/list/',
 
     // lista com todas as paginas acessiveis do sistema
     pages: [],
 
     // pagina inicial
-    indexPage: '',
+    indexPage: 'index.html',
 
-    // se nao for utilizar os atributos a baixo passe FALSE / ou para aplicar em todas as paginas passe TRUE
+    // Para os itens abvaixo passe TRUE ou FALSE para aplicar em todas as paginas ou informe as paginas em um array
+    // Oculta barra superior (label/icones)
     navbarHide: ['form'],
+    // Oculta barra inferior (label/icones)
+    toolbarHide: ['about'],
+    // oculta menu esquerdo (slide)
     panelLeftHide: false,
+    // oculta menu direito (slide)
     panelRightHide: true,
-    toolbarHide: ['home'],
 };
 
 
@@ -65,7 +75,7 @@ myApp.c.setLocalStorage = function (name, data) {
 
 // habilita/desabilita navbar (barra superior)
 myApp.c.navbarHide = function (pgName) {
-    if ($.inArray(pgName, myApp.c.appConfig.navbarHide) === -1 && myApp.c.appConfig.navbarHide !== true) {
+    if ($.inArray(pgName, this.appConfig.navbarHide) === -1 && this.appConfig.navbarHide !== true) {
         myApp.showNavbar('.navbar', true);
         $$('.page-content').css('padding-top', '34px');
     } else {
@@ -145,10 +155,10 @@ myApp.c.setToolbar = function (itens) {
     var codHtml = '<div class="toolbar-inner">';
     for (var i in itens) {
         if (typeof itens[i].href == 'undefined') {
-            console.info('O item: ' + (itens[i].label || itens[i].ico) + ',  da Toolbar nao possui o attr "href", favor addiciona-lo!');
+            console.warn('O item: ' + (itens[i].label || itens[i].ico) + ',  da Toolbar nao possui o attr "href", favor addiciona-lo!');
         } else {
             codHtml += '<a href="./pages/' + itens[i].href + '" class="link link-toolbar-bottom active-' + itens[i].href.split('.')[0] + ' ' + (itens[i].class || '') + '">';
-            codHtml += '<i class="fa fa-' + (itens[i].ico || 'question-circle-o') + '" aria-hidden="true"></i><span class="tabbar-label">' + (itens[i].label || '') + '</span>';
+            codHtml += '<i class="fa fa-2x fa-' + (itens[i].ico || 'question-circle-o') + '" aria-hidden="true"></i><span class="tabbar-label">' + (itens[i].label || '') + '</span>';
             codHtml += '</a>';
         }
     }
@@ -158,7 +168,7 @@ myApp.c.setToolbar = function (itens) {
 
 // habilita/desabilita toolbar (barra inferior)
 myApp.c.toolbarHide = function (pgName) {
-    if ($.inArray(pgName, myApp.c.appConfig.toolbarHide) === -1 && myApp.c.appConfig.toolbarHide !== true) {
+    if ($.inArray(pgName, this.appConfig.toolbarHide) === -1 && this.appConfig.toolbarHide !== true) {
         tabbarBottom = $('div#toolbar-bottom');
         tabbarBottom.find('.link-toolbar-bottom').removeClass('active');
         tabbarBottom.find('.link-toolbar-bottom.active-' + pgName).addClass('active');
@@ -173,7 +183,7 @@ myApp.c.toolbarHide = function (pgName) {
 // loadPage - carrega pagina na view principal
 myApp.c.go = function (pgName) {
     if ($.inArray(pgName.split('.')[0], this.appConfig.pages) === -1) {
-        console.info('Pagina nao registrada, adicione-a em: myApp.c.appConfig.pages');
+        console.warn('Pagina nao registrada, adicione-a em: myApp.c.appConfig.pages');
     } else {
         mainView.router.loadPage('./pages/' + pgName);
     }
@@ -221,11 +231,11 @@ myApp.c.init = function () {
     if (typeof pages === 'object') {
         var loadPage = new LoadPage();
         for (var i in pages) {
-            this.initPage(pages[i], loadPage[Util.ucfirst(pages[i])]);
+            this.initPage(pages[i], loadPage[pages[i]]);
         }
     }
     // redireciona para a pagina inicial
-    myApp.c.go(this.appConfig.indexPage);
+    this.go(this.appConfig.indexPage);
 };
 
 // Ajax na api global (appConfig.urlApi)
@@ -240,14 +250,11 @@ myApp.c.ajaxApi = function (method, params, callback) {
     myApp.showPreloader(' ');
     var ajax = $.ajax(ajaxParams);
     ajax.always(function (jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR);
-        console.log(textStatus);
-        console.log(errorThrown);
         myApp.hidePreloader();
         if ((error = myApp.c.errorAjaxApi(jqXHR, textStatus, errorThrown))) {
             myApp.alert(error, 'Opss');
         } else if (typeof callback == 'function') {
-            callback(textStatus);
+            callback(jqXHR);
         }
     });
 };
@@ -260,13 +267,13 @@ myApp.c.errorAjaxApi = function (jqXHR, textStatus, errorThrown) {
             errorStr = 'O tempo limite de conexão foi atingido.';
             break;
         default:
-            if ((typeofError = typeof textStatus.error) != 'undefined') {
+            if ((typeofError = typeof jqXHR.error) != 'undefined') {
                 if (typeofError == 'object') {
-                    for (var i in textStatus.error) {
-                        errorStr += '&bull; ' + textStatus.error[i] + '<br />';
+                    for (var i in jqXHR.error) {
+                        errorStr += '&bull; ' + jqXHR.error[i] + '<br />';
                     }
                 } else {
-                    errorStr += '&bull; ' + String(textStatus.error);
+                    errorStr += '&bull; ' + String(jqXHR.error);
                 }
             }
     }
@@ -292,26 +299,148 @@ myApp.c.initCalendar = function () {
     objCalendar = $$('input[type=text].calendar');
     for (var i = 0; i < objCalendar.length; i++) {
         this.calendar[objCalendar[i].id] = myApp.calendar($.extend(paramCalendar, paramCalendarDefault, {input: '#' + objCalendar[i].id}));
-        console.log(objCalendar[i].id);
     }
     // para calendario selecao multipla (seleciona varias datas)
     paramCalendar = {};
     objCalendar = $$('input[type=text].calendar-multiple');
     for (var i = 0; i < objCalendar.length; i++) {
         this.calendar[objCalendar[i].id] = myApp.calendar($.extend(paramCalendar, paramCalendarDefault, {input: '#' + objCalendar[i].id, multiple: true}));
-        console.log(paramCalendar);
     }
     // para calendario com selecao de periodo (data inicio e fim)
     paramCalendar = {};
     objCalendar = $$('input[type=text].calendar-range');
     for (var i = 0; i < objCalendar.length; i++) {
         this.calendar[objCalendar[i].id] = myApp.calendar($.extend(paramCalendar, paramCalendarDefault, {input: '#' + objCalendar[i].id, rangePicker: true}));
-        console.log(paramCalendar);
     }
 };
 
-// cria lista
-myApp.c.listView = function (action, param, target, callback) {
+/*
+ * Criar listView
+ * action:  url do ajax
+ * param:   data do ajax
+ * target:  nome do template (é necessário criar o template.html templates/list/seuTarget.html) 
+ *          tbm é o do destino/alvo da lista <div class="list-block" id="seuTarget"
+ * callback:    callback ajax
+ * search:  busca na listview
+ */
+myApp.c.listView = function (action, param, target, callback, search = true, infiniteScroll = true) {
+    var objTarget = $('div#' + target);
+    if (objTarget.length == 0) {
+        console.warn('[myApp.c.listView] O target informado não foi encontrado, é necessário criar uma  <div> com id="' + target + '".');
+        return;
+    }
+    objTarget.append('<ul class="template-list" id="target-' + target + '">');
+    var TemplateListView = new Template(target);
+    TemplateListView.compileList(action, param, function (a) {
+        if (search) myApp.c.createSearchList();
+        if (infiniteScroll && myApp.c.appConfig.infineteScrollEnable) myApp.c.infiniteScroll(TemplateListView, a);
+        if (typeof callback == 'function') callback(a);
+    });
+};
+
+// cria searchlist
+myApp.c.createSearchList = function () {
+    var searchBar = '\
+            <form class="searchbar">\n\
+                <div class="searchbar-input">\n\
+                    <input type="search" placeholder="buscar">\n\
+                    <a href="#" class="searchbar-clear"></a>\n\
+                </div>\n\
+                <a href="#" class="searchbar-cancel">Cancelar</a>\n\
+            </form>\n\
+            <div class="searchbar-overlay"></div>',
+        notFound = '\
+            <div class="content-block searchbar-not-found">\n\
+               <div class="content-block-inner">Nenhum registro encontrado.</div>\n\
+            </div>',
+        objHtml = $('.page .page-content');
+    objHtml.before(searchBar);
+    objHtml.find('.list-block').addClass('list-block-search searchbar-found').before(notFound);
+    myApp.searchbar('.searchbar', {
+        searchList: '.list-block-search',
+        searchIn: '.item-title'
+    });
+};
+
+// cria infiniteScroll
+myApp.c.infiniteScroll = function (TemplateListView, data) {
+    
+    // verifica se é um array ou object
+    var dataArray = data instanceof Array;
+    var newObjectList = dataArray ? [] : {};
+
+    // add class infinite-scroll
+    var objList = $($('.infinite-scroll')[$('.infinite-scroll').length - 1]);
+    var objListBlock = objList.find('.list-block');
+    var objListLi = objListBlock.find('li');
+    var objListUl = objListBlock.find('ul');
+    var preloaderHtml = '\n\
+        <div class="infinite-scroll-preloader">\n\
+            <div class="preloader"></div>\n\
+        </div>';
+    
+    // Attach preloader
+    objListBlock.append(preloaderHtml);
+
+    // Loading flag
+    var loading = false;
+
+    // Last loaded index
+    var lastIndex = objListLi.length;
+
+    // Max items to load
+    var maxItems = Object.keys(data).length;
+
+    // Append items per load
+    var itemsPerLoad = this.appConfig.infineteScrollQtd;
+    
+    // Attach 'infinite' event handler
+    objList.on('infinite', function () {
+
+        // Exit, if loading in progress
+        if (loading) return;
+
+        // Set loading flag
+        loading = true;
+
+        // Emulate 1s loading
+        setTimeout(function () {
+
+            // Reset loading flag
+            loading = false;
+
+            if (lastIndex >= maxItems) {
+                // Nothing more to load, detach infinite scroll events to prevent unnecessary loadings
+                myApp.detachInfiniteScroll(objList);
+                // Remove preloader
+                $$('.infinite-scroll-preloader').remove();
+                return;
+            }
+
+            // Generate new object
+            newObjectList = dataArray ? [] : {};
+            for (var i = lastIndex; i < lastIndex + itemsPerLoad; i++) {
+                if (maxItems <= i) break;
+                if (dataArray) {
+                    newObjectList.push(data[i]);
+                } else {
+                    k = Object.keys(data)[i];
+                    newObjectList[k] = data[k];
+                }
+            }
+            
+            // Conpile and Append new items
+            TemplateListView.compileData(newObjectList);
+            TemplateListView.appendData();
+
+            // Update last loaded index
+            lastIndex = objListBlock.find('li').length;
+                
+        }, 500);
+        
+    });
+    
+    objList.trigger('infinite');
     
 };
 
@@ -349,10 +478,3 @@ var Util = {
         return a ? dias[a] : dias;
     }
 };
-
-
-
-
-
-
-

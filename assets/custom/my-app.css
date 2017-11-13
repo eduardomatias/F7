@@ -1,99 +1,106 @@
 
 /* CORE ------------------------------------ */
 div[class*=block] {
-	margin-top: 25px;
-	margin-bottom: 15px;
+    margin-top: 25px;
+    margin-bottom: 15px;
 }
 div.content-block .content-block-inner, div.item-content .item-inner {
-	padding: 10px 15px;
+    padding: 10px 15px;
 }
 div.item-content {
-	padding: 0px!important;	
+    padding: 0px!important;	
 }
 div.content-block-title {
-	text-transform: none!important;
-	font-size: 17px;
-	font-weight: bold;
-	color: #444;
+    text-transform: none!important;
+    font-size: 17px;
+    font-weight: bold;
+    color: #444;
 }
 /* CORE ------------------------------------ */
 
 
 /* TOOLBAR-BOTTOM --------------------------- */
+#toolbar-bottom {
+    height: auto!important;
+    min-height: 55px!important;
+}
 #toolbar-bottom .link-toolbar-bottom i{
-	font-size: 28px;
+    
+}
+#toolbar-bottom .link-toolbar-bottom span{
+    font-size: 10px!important;
 }
 #toolbar-bottom .link-toolbar-bottom{
-	color: #666!important;
-	/* width: 20%!important; */
+    color: #666!important;
+    /* width: 20%!important; */
 }
 #toolbar-bottom .link-toolbar-bottom.active{
-	color: #FFF!important;
-	background-color: #007aff;
+    color: #FFF!important;
+    background-color: #007aff;
 }
 #toolbar-bottom .link-toolbar-bottom img {
-	max-width: inherit; 
-	width: 71px!important;
+    max-width: inherit; 
+    width: 71px!important;
 }
 /* TOOLBAR-BOTTOM --------------------------- */
 
 
 /* PANEL ------------------------------------ */
-	.panel {
-		background: #FFF;
-	}
-	.panel .top-panel {
-		border: 0px solid silver;
-		padding-left: 40px;
-	}
-	.panel .top-panel .slogan{
-		font-size: 10px;
-		color: #AAA;
-	}
-	.panel .top-panel .name{
-		font-size: 18px;
-		color: #555;
-		font-weight: bold;
-	}
-	.panel .list-block {
-		margin: 15px 0;
-		font-size: inherit;
-	}
-	.panel .list-block ul {}
-	.panel .list-block ul li{
-		position: initial;
-	}
-	.panel .list-block .item-content {
-		padding-left: 0;
-	}
-	.panel .list-block .item-content .item-inner{
-		padding-left: 0;
-		padding-top: auto;
-		padding-bottom: auto;
-		min-height: 40px;
-	}
+.panel, .panel ul {
+    background: #efeff4;
+}
+.panel .top-panel {
+    border: 0px solid silver;
+    padding-left: 40px;
+}
+.panel .top-panel .slogan{
+    font-size: 10px;
+    color: #AAA;
+}
+.panel .top-panel .name{
+    font-size: 18px;
+    color: #555;
+    font-weight: bold;
+}
+.panel .list-block {
+    margin: 15px 0;
+    font-size: inherit;
+}
+.panel .list-block ul {}
+.panel .list-block ul li{
+    position: initial;
+}
+.panel .list-block .item-content {
+    padding-left: 0;
+}
+.panel .list-block .item-content .item-inner{
+    padding-left: 0;
+    padding-top: auto;
+    padding-bottom: auto;
+    min-height: 40px;
+}
 /* PANEL ------------------------------------ */
 
 
 /* LIST BLOCK -------------------------------- */
 .list-block .item-inner {
-	min-heigh: inherit;
+    min-heigh: inherit;
 }
 .list-block li{
-	display: table;
-	width: 100%;
+    display: table;
+    width: 100%;
 }
 .list-block .item-title.label {
-	width: 100%;
-	font-size: 14px;
-	position: absolute;
-	top: 10px !important;
-	color: #444;
+    width: 100%;
+    font-size: 14px;
+    position: absolute;
+    top: 10px !important;
+    color: #444;
 }	
 .list-block .item-input {
-	width: 100%;
-	margin: 0px !important;
-	margin-top: 22px !important;
+    width: 100%;
+    margin: 0px !important;
+    margin-top: 22px !important;
 }
 .list-block input[type="date"], 
 .list-block input[type="datetime-local"], 
@@ -107,57 +114,77 @@ div.content-block-title {
 .list-block input[type="url"], 
 .list-block select, 
 .list-block textarea {
-	font-size: 14px;
-	border: 1px #DDD solid;
-	border-radius: 6px;
-	padding: 0px 8px!important;
-	height: 33px;
-	color: #444;
+    font-size: 14px;
+    border: 1px #DDD solid;
+    border-radius: 6px;
+    padding: 0px 8px!important;
+    height: 33px;
+    color: #444;
 }
 .list-block textarea {
-	height: 100px;
+    height: 100px;
 }
 .list-block .item-content .item-media{
-	padding: 10px;
+    padding: 10px;
 }
 .list-block .item-content .item-media + .item-inner {
-	margin-left: 0px;
+    margin-left: 0px;
 }
 .list-block .item-content .item-inner .item-title .item-media {
-	padding: 0px!important;
+    padding: 0px!important;
 }
 .list-block .item-content .item-inner .item-title .item-media i.fa{
-	padding-right: 8px!important;
+    padding-right: 8px!important;
 }
 /* LIST BLOCK -------------------------------- */
 
 
+/* SEARCH ------------------------------------ */
+.page>.searchbar {
+    position: relative;
+}
+/* SEARCH ------------------------------------ */
+
+
+/* INFINITESCROLL ---------------------------- */
+.infinite-scroll-preloader {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.infinite-scroll-preloader .preloader {
+    width:34px;
+    height:34px;
+}     
+/* INFINITESCROLL ---------------------------- */
+
+
 /* UTIL -------------------------------------- */
 .width-33p {
-	float: left;
-	width: 33%;
+    float: left;
+    width: 33%;
 }
 .width-33p .item-inner {
-	padding-left: 10px!important;
-	padding-right: 10px!important;
+    padding-left: 10px!important;
+    padding-right: 10px!important;
 }
 li .width-33p:first-child .item-inner {
-	padding-left: 15px!important;
-	padding-right: 5px!important;
+    padding-left: 15px!important;
+    padding-right: 5px!important;
 }
 li .width-33p:last-child .item-inner {
-	padding-left: 5px!important;
-	padding-right: 15px!important;
+    padding-left: 5px!important;
+    padding-right: 15px!important;
 }
 .width-50p {
-	float: left;
-	width: 50%;
+    float: left;
+    width: 50%;
 }
 li .width-50p:first-child .item-inner {
-	padding-right: 7.5px!important;
+    padding-right: 7.5px!important;
 }
 li .width-50p:last-child .item-inner {
-	padding-left: 7.5px!important;
+    padding-left: 7.5px!important;
 }
 /* UTIL -------------------------------------- */
 
