@@ -8,7 +8,7 @@ myApp.c.setPanelLeft([
     {href: 'home.html', label: 'HOME', ico: 'home'},
     {href: 'form.html', label: 'FORM', ico: 'wpforms'},
     {href: 'listEstados.html', label: 'ESTADOS', ico: 'list-alt'},
-    {href: 'listPaises.html', label: 'PAÕSES', ico: 'list-alt'},
+    {href: 'listPaises.html', label: 'PA√çSES', ico: 'list-alt'},
     {href: 'about.html', label: 'ABOUT', ico: 'info-circle'},
     {href: 'services.html', label: 'SERVICES', ico: 'cogs'},
     {label: 'FECHAR', ico: 'close'}

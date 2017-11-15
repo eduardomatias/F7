@@ -83,37 +83,37 @@ div.content-block-title {
 
 
 /* LIST BLOCK -------------------------------- */
-.list-block .item-inner {
+.form-custom .list-block .item-inner {
     min-heigh: inherit;
 }
-.list-block li{
+.form-custom .list-block li{
     display: table;
     width: 100%;
 }
-.list-block .item-title.label {
+.form-custom .list-block .item-title.label {
     width: 100%;
     font-size: 14px;
     position: absolute;
     top: 10px !important;
     color: #444;
 }	
-.list-block .item-input {
+.form-custom .list-block .item-input {
     width: 100%;
     margin: 0px !important;
     margin-top: 22px !important;
 }
-.list-block input[type="date"], 
-.list-block input[type="datetime-local"], 
-.list-block input[type="email"], 
-.list-block input[type="number"], 
-.list-block input[type="password"], 
-.list-block input[type="search"], 
-.list-block input[type="tel"], 
-.list-block input[type="text"], 
-.list-block input[type="time"], 
-.list-block input[type="url"], 
-.list-block select, 
-.list-block textarea {
+.form-custom .list-block input[type="date"], 
+.form-custom .list-block input[type="datetime-local"], 
+.form-custom .list-block input[type="email"], 
+.form-custom .list-block input[type="number"], 
+.form-custom .list-block input[type="password"], 
+.form-custom .list-block input[type="search"], 
+.form-custom .list-block input[type="tel"], 
+.form-custom .list-block input[type="text"], 
+.form-custom .list-block input[type="time"], 
+.form-custom .list-block input[type="url"], 
+.form-custom .list-block select, 
+.form-custom .list-block textarea {
     font-size: 14px;
     border: 1px #DDD solid;
     border-radius: 6px;
@@ -121,19 +121,19 @@ div.content-block-title {
     height: 33px;
     color: #444;
 }
-.list-block textarea {
+.form-custom .list-block textarea {
     height: 100px;
 }
-.list-block .item-content .item-media{
+.form-custom .list-block .item-content .item-media{
     padding: 10px;
 }
-.list-block .item-content .item-media + .item-inner {
+.form-custom .list-block .item-content .item-media + .item-inner {
     margin-left: 0px;
 }
-.list-block .item-content .item-inner .item-title .item-media {
+.form-custom .list-block .item-content .item-inner .item-title .item-media {
     padding: 0px!important;
 }
-.list-block .item-content .item-inner .item-title .item-media i.fa{
+.form-custom .list-block .item-content .item-inner .item-title .item-media i.fa{
     padding-right: 8px!important;
 }
 /* LIST BLOCK -------------------------------- */
@@ -157,6 +157,43 @@ div.content-block-title {
     height:34px;
 }     
 /* INFINITESCROLL ---------------------------- */
+
+
+/* LOGIN ------------------------------------- */
+.login-screen-title {
+    text-align: center;
+    font-size: 30px;
+    width: 100%;
+    margin: 30px auto;
+}
+.login-screen-subtitle {
+    text-align: center;
+    font-size: 12px;
+    width: 100%;
+    margin-top: -30px;
+    margin-bottom: 30px;
+}
+/* LOGIN ------------------------------------- */
+
+
+/* MODAL ------------------------------------- */
+.my-modal {
+    display: none;
+}
+.modal-inner{
+    background: rgba(255,255,255,1)!important;
+}
+.modal-inner .list-block,.modal-inner .content-block{
+    margin-top: 15px!important;
+    margin-bottom: 10px!important;
+}
+.modal-inner div.content-block .content-block-inner, .modal-inner div.item-content .item-inner {
+    padding: 10px 5px!important;
+}
+.picker-modal.modal-in {
+    z-index: 99999;
+}
+/* MODAL ------------------------------------- */
 
 
 /* UTIL -------------------------------------- */
@@ -187,6 +224,11 @@ li .width-50p:last-child .item-inner {
     padding-left: 7.5px!important;
 }
 /* UTIL -------------------------------------- */
+
+
+/* MY CSS ------------------------------------ */
+
+/* MY CSS ------------------------------------ */
 
 
 

@@ -1,3 +1,5 @@
+
+
 // Initialize app
 var myApp = new Framework7({
     swipeBackPage: false,
@@ -24,8 +26,12 @@ myApp.c = {};
 myApp.c.appConfig = {
     // informacoes do app 
     appLogo: './assets/img/logo.png',
-    appName: 'MyApp',
-    appSlogan: 'MyApp Slogan',
+    appName: 'AppName',
+    appSlogan: 'appSlogan',
+    
+    // nome do localStorage
+    localStorageName: 'myApp',
+    
     // infineteScroll
     infineteScrollEnable: true,
     // Itens carregados por vez
@@ -41,15 +47,21 @@ myApp.c.appConfig = {
 
     // lista com todas as paginas acessiveis do sistema
     pages: [],
+    
+    // URL das paginas
+    urlPages: './pages/',
 
     // pagina inicial
     indexPage: 'index.html',
+    
+    // login
+    loginEnable: false,
 
-    // Para os itens abvaixo passe TRUE ou FALSE para aplicar em todas as paginas ou informe as paginas em um array
+    // Para os itens abaixo passe TRUE ou FALSE para aplicar em todas as paginas ou informe as paginas em um array
     // Oculta barra superior (label/icones)
-    navbarHide: ['form'],
+    navbarHide: false,
     // Oculta barra inferior (label/icones)
-    toolbarHide: ['about'],
+    toolbarHide: true,
     // oculta menu esquerdo (slide)
     panelLeftHide: false,
     // oculta menu direito (slide)
@@ -63,13 +75,19 @@ myApp.c.setAppConfig = function (param) {
 };
 
 // getLocalStorage - obtem dados do localStorage - return JSON / null
-myApp.c.getLocalStorage = function (name) {
-    return JSON.parse(localStorage.getItem(name));
+myApp.c.getLocalStorage = function () {
+    return JSON.parse((localStorage.getItem(this.appConfig.localStorageName) || '{}'));
 };
 
 // setLocalStorage - altera ou cria localStorage - return void
-myApp.c.setLocalStorage = function (name, data) {
-    localStorage.setItem(name, JSON.stringify(data));
+myApp.c.setLocalStorage = function (data) {
+    localStorage.setItem(this.appConfig.localStorageName, JSON.stringify($.extend(this.getLocalStorage(), data)));
+    return;
+};
+
+// clearLocalStorage - limpa localStorage - return void
+myApp.c.clearLocalStorage = function () {
+    localStorage.setItem(this.appConfig.localStorageName, '{}');
     return;
 };
 
@@ -91,9 +109,9 @@ myApp.c.panelHide = function (direction, pgName) {
     var configPanel = this.appConfig['panel' + directionU + 'Hide'];
     // existe permissao para esconder o panel da pagina
     var pemissionExist = ($.inArray(pgName, configPanel) !== -1 || configPanel === true);
-    if ((myApp.params.swipePanel == 'both' || myApp.params.swipePanel != direction) && pemissionExist) {
+    if ((myApp.params.swipePanel == 'both' || myApp.params.swipePanel != direction) && myApp.params.swipePanel !== false && pemissionExist) {
         myApp.params.swipePanel = (directionU == 'Right' ? 'left' : 'right');
-    } else if (myApp.params.swipePanel == direction && pemissionExist) {
+    } else if ((myApp.params.swipePanel == direction || myApp.params.swipePanel === false) && pemissionExist) {
         myApp.params.swipePanel = false;
     } else if (myApp.params.swipePanel != direction && !pemissionExist) {
         myApp.params.swipePanel = 'both';
@@ -182,11 +200,18 @@ myApp.c.toolbarHide = function (pgName) {
 
 // loadPage - carrega pagina na view principal
 myApp.c.go = function (pgName) {
-    if ($.inArray(pgName.split('.')[0], this.appConfig.pages) === -1) {
-        console.warn('Pagina nao registrada, adicione-a em: myApp.c.appConfig.pages');
+    pgNameV = pgName.split('.')[0];
+    if ($.inArray(pgNameV, this.appConfig.pages) === -1) {
+        console.warn('A pagina "' + pgNameV + '" nao registrada, adicione-a em: myApp.c.appConfig.pages');
+        mainView.router.loadPage(this.appConfig.urlPages + this.appConfig.indexPage);
     } else {
-        mainView.router.loadPage('./pages/' + pgName);
+        mainView.router.loadPage(this.appConfig.urlPages + pgName);
     }
+};
+
+// loadPage - index pagina na view principal
+myApp.c.goIndex = function () {
+    this.go(this.appConfig.indexPage);
 };
 
 // para todas as paginas passarem por essas regras
@@ -196,6 +221,8 @@ myApp.c.initPage = function (page, callback) {
 
     // evento antes da animacao da page
     myApp.onPageBeforeAnimation(page, function (pg) {
+        // nome da pagina atual
+        myApp.c.currentPage = pg.name;
         // controla exibicao da "navbar" (barra superior)
         myApp.c.navbarHide(pg.name);
         // controla exibicao do "panel" (menu lateral)
@@ -214,19 +241,91 @@ myApp.c.initPage = function (page, callback) {
     myApp.onPageAfterAnimation(page, function (pg) {
         // metodos after load page
         myApp.c.afterLoadPage();
+        // metodos after load page custom
+        if (typeof myApp.c['afterLoadPage' + pg.name] == 'function') {
+            myApp.c['afterLoadPage' + pg.name](pg);
+        }
         // calback do load
         callback(pg);
     });
 };
 
-// funcoes que sempre devem ser rodar apos carregar a pagina
+// funcoes que sempre devem rodar apos carregar a pagina
 myApp.c.afterLoadPage = function () {
     // start calendar
     this.initCalendar();
+    // start money
+    this.initMoney();
+    // start modal
+    this.initModal();
 };
+
+// Inicia validacao do login
+myApp.c.initLogin = function () {
+    if (this.appConfig.loginEnable) {
+        var pageLogin = 'login';
+        this.posLogin = this.appConfig.indexPage;
+        this.appConfig.indexPage = pageLogin + '.html';
+        this.appConfig.pages.push(pageLogin);
+       
+        if (typeof this.appConfig.navbarHide == 'object') {
+            this.appConfig.navbarHide.push(pageLogin);
+        } else if (this.appConfig.navbarHide == false) {
+            this.appConfig.navbarHide = [pageLogin];
+        }
+        
+        if (typeof this.appConfig.toolbarHide == 'object') {
+            this.appConfig.toolbarHide.push(pageLogin);
+        } else if (this.appConfig.toolbarHide == false) {
+            this.appConfig.toolbarHide = [pageLogin];
+        }
+        
+        if (typeof this.appConfig.panelLeftHide == 'object') {
+            this.appConfig.panelLeftHide.push(pageLogin);
+        } else if (this.appConfig.panelLeftHide == false) {
+            this.appConfig.panelLeftHide = [pageLogin];
+        }
+        
+        if (typeof this.appConfig.panelRightHide == 'object') {
+            this.appConfig.panelRightHide.push(pageLogin);
+        } else if (this.appConfig.panelRightHide == false) {
+            this.appConfig.panelRightHide = [pageLogin];
+        }
+        
+        // afterLoadPageLogin
+        myApp.c['afterLoadPage' + pageLogin] = function (pg) {
+            $('.login-screen-title').html(this.appConfig.appName);
+            $('.login-screen-subtitle').html(this.appConfig.appSlogan);
+        }
+        
+        // logout
+        $('.my-logout').on('click', function (){
+            myApp.c.logout();
+        })
+    }
+};
+
+// logout app
+myApp.c.logout = function () {
+    this.clearLocalStorage();
+    this.go('login.html');
+    return;
+}
+
+// callback default Login
+myApp.c.callbackLogin = function (a) {
+    if(a !== false) {
+        myApp.c.setLocalStorage(a);
+        myApp.c.appConfig.indexPage = myApp.c.posLogin;
+        myApp.c.goIndex();
+    } else {
+        myApp.alert('Erro na autenticação, dados incorretos!', 'Opss');
+    }
+}
 
 // Inicia a aplicacao (regras + redireciona para o index)
 myApp.c.init = function () {
+    this.initLogin();
     var pages = this.appConfig.pages;
     if (typeof pages === 'object') {
         var loadPage = new LoadPage();
@@ -234,7 +333,7 @@ myApp.c.init = function () {
             this.initPage(pages[i], loadPage[pages[i]]);
         }
     }
-    // redireciona para a pagina inicial
+    // redireciona para a pagina inicial do app
     this.go(this.appConfig.indexPage);
 };
 
@@ -314,6 +413,16 @@ myApp.c.initCalendar = function () {
     }
 };
 
+// inicializa money da pagina class: money
+myApp.c.initMoney = function () {
+    this.money = {};
+    var objMoney = $$('input.money');
+    for (var i = 0; i < objMoney.length; i++) {
+         $(objMoney[i]).maskMoney({thousands:'.', decimal:',', allowZero: true});
+         this.money[objMoney[i].id];
+    }
+}
+
 /*
  * Criar listView
  * action:  url do ajax
@@ -334,41 +443,66 @@ myApp.c.listView = function (action, param, target, callback, search = true, inf
     var TemplateListView = new Template(target);
     TemplateListView.compileList(action, param, function (a) {
         if (search) myApp.c.createSearchList();
-        if (myApp.c.appConfig.infineteScrollEnable) myApp.c.infiniteScroll(TemplateListView, a);
+        if (myApp.c.appConfig.infineteScrollEnable) myApp.c.infiniteScroll(objTarget, TemplateListView, a);
         if (typeof callback == 'function') callback(a);
     });
 };
 
 // cria searchlist
 myApp.c.createSearchList = function () {
-    var numObj = $('.page .page-content').length - 1,
-		searchBar = '\
-            <form class="searchbar searchbar-' + numObj + '">\n\
-                <div class="searchbar-input">\n\
-                    <input type="search" placeholder="buscar">\n\
-                    <a href="#" class="searchbar-clear"></a>\n\
-                </div>\n\
-                <a href="#" class="searchbar-cancel">Cancelar</a>\n\
-            </form>\n\
-            <div class="searchbar-overlay"></div>',
-        notFound = '\
-            <div class="content-block searchbar-not-found">\n\
-               <div class="content-block-inner">Nenhum registro encontrado.</div>\n\
-            </div>',
-		objHtml = $($('.page .page-content')[numObj]);
-    objHtml.before(searchBar);
-    objHtml.find('.list-block').addClass('list-block-search searchbar-found').before(notFound);
-    searchbar = myApp.searchbar('.searchbar-' + numObj, {
-        searchList: '.list-block-search',
-        searchIn: '.item-title',
-		onSearch: function(a){
-			console.log(a);
-		}
-	});
+    var numObj = $('div.page-on-center .page-content').length - 1;
+    // verifica se ja foi criado
+    if (!$('div.page-on-center').find('.searchbar-' + numObj).length) {
+        var searchBar = '\
+                <form class="searchbar searchbar-' + numObj + '">\n\
+                    <div class="searchbar-input">\n\
+                        <input type="search" placeholder="buscar">\n\
+                        <a href="#" class="searchbar-clear"></a>\n\
+                    </div>\n\
+                    <a href="#" class="searchbar-cancel">Cancelar</a>\n\
+                </form>\n\
+                <div class="searchbar-overlay"></div>',
+            notFound = '\
+                <div class="content-block searchbar-not-found">\n\
+                   <div class="content-block-inner">Nenhum registro encontrado.</div>\n\
+                </div>',
+            objHtml = $($('div.page-on-center .page-content')[numObj]);
+        
+        objHtml.before(searchBar);
+        objHtml.find('.list-block').addClass('list-block-search searchbar-found').before(notFound);
+        searchbar = myApp.searchbar('.searchbar-' + numObj, {
+            searchList: '.list-block-search',
+            searchIn: '.item-title',
+            onSearch: function(a){}
+        });
+    }
+};
+
+// init modal
+myApp.c.initModal = function () {
+    this.modal = {};
+    var modal = $('div.my-modal');
+    var qtdModal = modal.length;
+    for (var i = 0; i < qtdModal; i++) {
+        idModal = $(modal[i]).attr('id');        
+        this.modal[idModal] = myApp.modal({title:''});
+        myApp.closeModal(this.modal[idModal]);
+        modalInner = $(this.modal[idModal]).find('div.modal-inner');
+        modalInner.append(modal[i]);
+        $(modal[i]).css('display', 'block');
+        t = parseInt(modalInner.css('height'));
+        modalInner.parent('div.modal-in').css('margin-top', String(parseInt(((t/2)+15)*-1)) + 'px');
+    }    
+};
+myApp.c.openModal = function (modalName) {
+    myApp.openModal(this.modal[modalName]);
+};
+myApp.c.closeModal = function (modalName) {
+    myApp.closeModal(this.modal[modalName]);
 };
 
 // cria infiniteScroll
-myApp.c.infiniteScroll = function (TemplateListView, data) {
+myApp.c.infiniteScroll = function (objTarget, TemplateListView, data) {
     
     // verifica se é um array ou object
     var dataArray = data instanceof Array;
@@ -376,7 +510,7 @@ myApp.c.infiniteScroll = function (TemplateListView, data) {
 
     // add class infinite-scroll
     var objList = $($('.infinite-scroll')[$('.infinite-scroll').length - 1]);
-    var objListBlock = objList.find('.list-block');
+    var objListBlock = objTarget;
     var objListLi = objListBlock.find('li');
     var objListUl = objListBlock.find('ul');
     var preloaderHtml = '\n\
@@ -456,7 +590,7 @@ myApp.c.infiniteScroll = function (TemplateListView, data) {
 /*
  Util - Lista de metodos auxiliares
  */
-var Util = {
+var Util = $.extend((Util || {}), {
 
     // primeira letra da string maiuscula resto minusculo
     ucfirst: function (str) {
@@ -486,4 +620,4 @@ var Util = {
         var dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
         return a ? dias[a] : dias;
     }
-};
+});
