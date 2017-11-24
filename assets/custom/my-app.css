@@ -25,7 +25,7 @@ div.content-block-title {
     min-height: 55px!important;
 }
 #toolbar-bottom .link-toolbar-bottom i{
-    
+
 }
 #toolbar-bottom .link-toolbar-bottom span{
     font-size: 10px!important;
@@ -46,6 +46,9 @@ div.content-block-title {
 
 
 /* PANEL ------------------------------------ */
+.panel .top-panel {
+    background-size: 35px 35px!important;
+}
 .panel, .panel ul {
     background: #efeff4;
 }
@@ -180,6 +183,14 @@ div.content-block-title {
 .my-modal {
     display: none;
 }
+.my-modal .close {
+    float: right;
+    padding: 10px;
+    z-index: 9;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
 .modal-inner{
     background: rgba(255,255,255,1)!important;
 }
@@ -194,6 +205,18 @@ div.content-block-title {
     z-index: 99999;
 }
 /* MODAL ------------------------------------- */
+
+
+/* NOTIFICATION ------------------------------ */
+.notifications .item-text {
+	text-overflow: initial!important;
+    -webkit-line-clamp: initial!important;
+    -webkit-box-orient: none!important;
+	overflow: auto!important;
+	height: auto!important;
+	max-height: 150px!important;
+}
+/* NOTIFICATION ------------------------------ */
 
 
 /* UTIL -------------------------------------- */
@@ -223,7 +246,10 @@ li .width-50p:first-child .item-inner {
 li .width-50p:last-child .item-inner {
     padding-left: 7.5px!important;
 }
+.float-left {float: left!important};
+.float-right {float: right!important};
 /* UTIL -------------------------------------- */
+
 
 
 /* MY CSS ------------------------------------ */
