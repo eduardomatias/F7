@@ -640,7 +640,7 @@ myApp.c.infiniteScroll = function (objTarget, TemplateListView, data) {
         // Set loading flag
         loading = true;
 
-        // Emulate 0,5s loading
+        // Emulate 0,1s loading
         setTimeout(function () {
 
             // Reset loading flag
@@ -675,7 +675,7 @@ myApp.c.infiniteScroll = function (objTarget, TemplateListView, data) {
 			
 			$$('.infinite-scroll-preloader').hide();
 			
-        }, 500);
+        }, 100);
         
     });
     
