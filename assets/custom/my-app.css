@@ -4,11 +4,17 @@ div[class*=block] {
     margin-top: 25px;
     margin-bottom: 15px;
 }
-div.content-block .content-block-inner, .item-content .item-inner {
+div.content-block .content-block-inner, div.item-content .item-inner {
     padding: 10px 15px;
 }
-.item-content {
+div.item-content {
     padding: 0px!important;	
+}
+li.item-content {
+    padding: 0px!important;	
+}
+li.item-content .item-inner {
+    padding: 8px;
 }
 div.content-block-title {
     text-transform: none!important;
