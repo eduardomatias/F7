@@ -86,7 +86,7 @@ div.content-block-title {
 
 
 /* LISTVIEW ---------------------------------- */
-.list-block  ul .item-content {
+.list-block  ul.list-view .item-content {
 	background-image: linear-gradient(to top, #FFF, #FFF, #FFF, #EEE)!important;
 }
 /* LISTVIEW ---------------------------------- */
