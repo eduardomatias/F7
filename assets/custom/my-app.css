@@ -4,10 +4,10 @@ div[class*=block] {
     margin-top: 25px;
     margin-bottom: 15px;
 }
-div.content-block .content-block-inner, div.item-content .item-inner {
+div.content-block .content-block-inner, .item-content .item-inner {
     padding: 10px 15px;
 }
-div.item-content {
+.item-content {
     padding: 0px!important;	
 }
 div.content-block-title {
@@ -87,7 +87,7 @@ div.content-block-title {
 
 /* LISTVIEW ---------------------------------- */
 .list-block  ul.list-view .item-content {
-	background-image: linear-gradient(to top, #FFF, #FFF, #FFF, #EEE)!important;
+	background-image: linear-gradient(to top, #FFF, #FFF, #FFF, #f7f7f7)!important;
 }
 /* LISTVIEW ---------------------------------- */
 
