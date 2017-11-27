@@ -2,6 +2,7 @@
 myApp.c.setAppConfig({
     pages: ['home', 'about', 'form', 'services', 'listEstados', 'listPaises'],
     indexPage: 'home.html',
+    loginEnable: false,
 });
 
 myApp.c.setPanelLeft([

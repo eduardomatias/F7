@@ -436,15 +436,18 @@ myApp.c.ajaxApi = function (method, params, callback) {
 
 // error Ajax
 myApp.c.errorAjaxApi = function (jqXHR, textStatus, errorThrown) {
-    var errorStr = '';
+	var errorStr = '';
     switch (textStatus) {
         case 'timeout':
+			console.error(textStatus);
             errorStr = 'O tempo limite de conexão foi atingido.';
             break;
-        case 'error':			
-			errorStr = '[' + jqXHR.status + '] Tente novamente mais tarde.';
+        case 'error':
+			console.error(textStatus);
+            errorStr = '[' + jqXHR.status + '] Tente novamente mais tarde.';
             break;
-        default:
+		// erro tratado no backend
+		case 'success':
             if ((typeofError = typeof jqXHR.error) != 'undefined') {
                 if (typeofError == 'object') {
                     for (var i in jqXHR.error) {
@@ -457,6 +460,11 @@ myApp.c.errorAjaxApi = function (jqXHR, textStatus, errorThrown) {
                     errorStr += '&bull; ' + String(jqXHR.error);
                 }
             }
+            break;
+        default:
+			console.error(textStatus);
+            console.error(errorThrown);
+    		errorStr = 'Tente novamente mais tarde.';
             break;
     }
     return errorStr;

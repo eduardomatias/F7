@@ -1,5 +1,5 @@
 <?php
-	$data = [
+	$data = array(
 		'AC'=>'Acre',
 		'AL'=>'Alagoas',
 		'AP'=>'Amapá',
@@ -27,7 +27,7 @@
 		'SP'=>'São Paulo',
 		'SE'=>'Sergipe',
 		'TO'=>'Tocantins'
-	];
+	);
 
 	echo json_encode($data);
 ?>
