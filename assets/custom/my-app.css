@@ -85,6 +85,13 @@ div.content-block-title {
 /* PANEL ------------------------------------ */
 
 
+/* LISTVIEW ---------------------------------- */
+.list-block  ul .item-content {
+	background-image: linear-gradient(to top, #FFF, #FFF, #FFF, #EEE)!important;
+}
+/* LISTVIEW ---------------------------------- */
+
+
 /* LIST BLOCK -------------------------------- */
 .form-custom .list-block .item-inner {
     min-heigh: inherit;

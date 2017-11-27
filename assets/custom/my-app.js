@@ -529,7 +529,7 @@ myApp.c.listView = function (action, param, target, callback, search = true, inf
         console.warn('[myApp.c.listView] O target informado não foi encontrado, é necessário criar uma  <div> com id="' + target + '".');
         return;
     }
-    objTarget.append('<ul class="template-list" id="target-' + target + '">');
+    objTarget.append('<ul class="template-list list-view" id="target-' + target + '">');
     var TemplateListView = new Template(target);
     TemplateListView.compileList(action, param, function (a) {
         if (search) myApp.c.createSearchList();
