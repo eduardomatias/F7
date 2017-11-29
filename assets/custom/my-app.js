@@ -392,7 +392,7 @@ myApp.c.callbackLogin = function (a) {
         myApp.c.appConfig.indexPage = myApp.c.posLogin;
         myApp.c.goIndex();
     } else {
-        this.notification('error', 'Erro na autenticação, dados incorretos!');
+        myApp.c.notification('error', 'Erro na autenticação, dados incorretos!');
     }
 }
 
