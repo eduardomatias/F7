@@ -448,7 +448,10 @@ myApp.c.errorAjaxApi = function (jqXHR, textStatus, errorThrown) {
             break;
 		// erro tratado no backend
 		case 'success':
-            if ((typeofError = typeof jqXHR.error) != 'undefined') {
+			// prioridade no erro HTML
+			if ((typeofError = typeof jqXHR.errorHtml) == 'string') {
+				errorStr = jqXHR.errorHtml;
+            } else if ((typeofError = typeof jqXHR.error) != 'undefined') {
                 if (typeofError == 'object') {
                     for (var i in jqXHR.error) {
                         erroC = (typeof jqXHR.error[i] === 'string' ? jqXHR.error[i] : jqXHR.error[i][0]);
