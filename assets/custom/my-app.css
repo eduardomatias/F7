@@ -207,6 +207,9 @@ div.content-block-title {
 .modal-inner{
     background: rgba(255,255,255,1)!important;
 }
+.modal-preloader .modal-inner{
+    background: transparent!important;
+}
 .modal-inner .list-block,.modal-inner .content-block{
     margin-top: 15px!important;
     margin-bottom: 10px!important;

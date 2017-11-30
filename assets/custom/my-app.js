@@ -1,5 +1,4 @@
 
-
 // Initialize app
 var myApp = new Framework7({
     swipeBackPage: false,
@@ -422,9 +421,13 @@ myApp.c.ajaxApi = function (method, params, callback) {
     // verifica Preloader
     Preloader = $('.modal-overlay-visible').length;
     if (!Preloader) myApp.showPreloader(' ');
+	// trava modal
+	$('.modal-overlay').attr('style', 'z-index: 19999');
     
     var ajax = $.ajax(ajaxParams);
     ajax.always(function (jqXHR, textStatus, errorThrown) {		
+		// destrava modal
+		$('.modal-overlay').removeAttr('style');
         if (!Preloader) myApp.hidePreloader();
         if ((error = myApp.c.errorAjaxApi(jqXHR, textStatus, errorThrown))) {
             myApp.c.notification('error', error);
@@ -539,6 +542,28 @@ myApp.c.listView = function (action, param, target, callback, search = true, inf
         if (myApp.c.appConfig.infineteScrollEnable) myApp.c.infiniteScroll(objTarget, TemplateListView, a);
         if (typeof callback == 'function') callback(a);
     });
+	myApp.c.createAppendListView(TemplateListView, target);
+	myApp.c.createReloadListView(action, param, target, callback, search, infiniteScroll);
+};
+
+// cria reload para cada listView
+myApp.c.reloadListView = {};
+myApp.c.createReloadListView = function (action, param, target, callback, search, infiniteScroll) {
+	var target;
+	myApp.c.reloadListView[target] = function () {
+		myApp.c.listView(action, param, target, callback, search, infiniteScroll);
+	}
+};
+
+// add item na listView
+myApp.c.appendListView = {};
+myApp.c.createAppendListView = function (template, target) {
+	var template, target;
+	myApp.c.appendListView[target] = function (data) {
+		template.compileData((data || {}));
+		template.prependData();
+		Util.moveTo($('ul#target-' + target + ' li').first());
+	}
 };
 
 // cria searchlist
@@ -718,5 +743,13 @@ var Util = $.extend((Util || {}), {
     getDayNamesShort: function (a) {
         var dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
         return a ? dias[a] : dias;
-    }
+    },
+	
+	// reposiciona a tela (quando existe rolagem)
+	moveTo: function (obj) {
+		$('div.pages div').animate({
+			scrollTop: obj.position().top
+		}, 500);
+	}
+	
 });

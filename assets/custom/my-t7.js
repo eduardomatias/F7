@@ -75,10 +75,17 @@ class Template {
         this.dataCompiled = this.templateCompiled({data: data});
     }
 
+	// sobe escreve a lista
     loadData() {
         return (typeof this.dataCompiled == 'string' ? document.getElementById('target-' + this.templateId + this.i).innerHTML = this.dataCompiled : false);
     }
+	
+	// add no inicio
+    prependData() {
+        return (typeof this.dataCompiled == 'string' ? $('#target-' + this.templateId + this.i).prepend(this.dataCompiled) : false);
+    }
 
+	// add no final
     appendData() {
         return (typeof this.dataCompiled == 'string' ? $('#target-' + this.templateId + this.i).append(this.dataCompiled) : false);
     }
