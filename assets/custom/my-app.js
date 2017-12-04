@@ -414,6 +414,7 @@ myApp.c.ajaxApi = function (method, params, callback) {
     var ajaxParams = {};
     ajaxParams.type = 'POST';
     ajaxParams.dataType = 'json';
+    ajaxParams.crossDomain = true;
     ajaxParams.data = (params || {});
     ajaxParams.url = this.appConfig.urlApi + method;
     ajaxParams.timeout = 7000;
@@ -511,11 +512,11 @@ myApp.c.initCalendar = function () {
 
 // inicializa money da pagina class: money
 myApp.c.initMoney = function () {
-    this.money = {};
+    this.money = [];
     var objMoney = $$('input.money');
     for (var i = 0; i < objMoney.length; i++) {
          $(objMoney[i]).maskMoney({thousands:'.', decimal:',', allowZero: true});
-         this.money[objMoney[i].id];
+         this.money.push([objMoney[i].id]);
     }
 }
 
