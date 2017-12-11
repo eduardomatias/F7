@@ -1,0 +1,78 @@
+<!-- Top Navbar-->
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="left">
+		<a href="#" class="back link">
+			<i class="icon icon-back"></i>
+			<span>Back</span>
+		</a>
+	</div>
+    <div class="center sliding">Modal</div>
+    <div class="right">
+		<a href="#" class="link icon-only open-panel">
+			<i class="icon icon-bars"></i>
+		</a>
+    </div>
+  </div>
+</div>
+<div class="pages">
+	<!-- Page, data-page contains page name-->
+	<div data-page="modal" class="page">
+		<!-- Scrollable page content-->
+		<div class="page-content">
+			<div class="content-block">
+				<div class="content-block-inner">
+					<a href="#" class="open-modal">Abrir modal</a>
+				</div>
+			</div>
+			<div class="my-modal" id="modalTeste">
+                <form action="#" onsubmit="return false" class="form-custom" id="form-teste">
+                    <div class="content-block-title">MODAL TESTE</div>
+                    <div class="list-block no-hairlines-between no-hairlines">
+                        <ul>
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-inner"> 
+                                        <div class="item-title label">
+                                            <div class="item-media"><i class="fa fa-inbox" aria-hidden="true"></i>Input</div>
+                                        </div>
+                                        <div class="item-input">
+                                            <input type="text" name="fildImput" value="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-inner"> 
+                                        <div class="item-title label">
+                                            <div class="item-media"><i class="fa fa-check-circle" aria-hidden="true"></i>Select</div>
+                                        </div>
+                                        <div class="item-input">
+                                            <select name="fildSelect">
+                                                <option value="1">Sim</option>
+                                                <option value="0">Não</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="item-content width-50p">
+                                    <div class="item-inner">
+                                        <input type="button" value="cancelar" class="button button-big button-fill color-red close-modal"/>
+                                    </div>
+                                </div>
+                                <div class="item-content width-50p">
+                                    <div class="item-inner">
+                                        <input type="submit" value="salvar" class="button button-big button-fill color-green close-modal"/>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+		</div>
+	</div>
+</div>

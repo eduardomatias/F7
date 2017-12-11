@@ -1,7 +1,9 @@
 /* CONFIG */
 myApp.c.setAppConfig({
-    pages: ['home', 'about', 'form', 'services', 'listEstados', 'listPaises'],
+    pages: ['home', 'about', 'form', 'services', 'listEstados', 'listPaises', 'modal'],
     indexPage: 'home.html',
+    navbarHide: ['form'],
+    toolbarHide: false,
     loginEnable: false,
 });
 
@@ -12,6 +14,7 @@ myApp.c.setPanelLeft([
     {href: 'listPaises.html', label: 'PAÍSES', ico: 'list-alt'},
     {href: 'about.html', label: 'ABOUT', ico: 'info-circle'},
     {href: 'services.html', label: 'SERVICES', ico: 'cogs'},
+    {href: 'modal.html', label: 'MODAL', ico: 'window-maximize'},
     {label: 'FECHAR', ico: 'close'}
 ]);
 

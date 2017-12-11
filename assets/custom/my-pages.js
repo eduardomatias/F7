@@ -18,6 +18,24 @@ class LoadPage {
     about(page) {
         console.log(page.url);
     }
+	
+    modal(page) {
+        console.log(page.url);
+		
+		// form
+        var formTeste = new Form('form-teste');	
+		
+        // abre modal
+		$('.open-modal').on('click', function () {
+			myApp.c.openModal('modalTeste');
+		});
+		
+        // fechar modal
+        $('.close-modal').on('click', function(){
+			formTeste.clear();
+            myApp.c.closeModal('modalTeste');
+        });
+    }
 
     listEstados(page) {
         console.log(page.url);
